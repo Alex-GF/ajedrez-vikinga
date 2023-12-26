@@ -11,7 +11,7 @@ from tqdm import tqdm
 from backend.agents.MCTS.mctsAgent import MCTSHnefataflAgent
 import matplotlib.pyplot as plt
 
-env = gym.make('hnefatafl/Hnefatafl-v0', board=1, max_movements=100, render_mode="human")
+env = gym.make('hnefatafl/Hnefatafl-v0', board=3, max_movements=100, render_mode="human")
 wrapped_env = FlattenObservation(env)
 
 learning_rate = 0.01
@@ -28,7 +28,7 @@ blacksAgent = MCTSHnefataflAgent(
     env=env,
     player=1,
     learning_rate=learning_rate,
-    simulations_number=10,
+    simulations_number=100,
 )
 
 whites_plot_entries = {
@@ -61,7 +61,8 @@ for episode in tqdm(range(n_episodes)):
 
         # update the agent
         # agent.update(obs, action, reward, terminated, next_obs) Se deja comentado para mejorar las estadísticas que se obtienen de él en el futuro
-        agent.update(next_obs, len(env.unwrapped.possible_actions), reward)
+        blacksAgent.update(next_obs, len(env.unwrapped.possible_actions), reward)
+        whitesAgent.update(next_obs, len(env.unwrapped.possible_actions), reward)
         
         # update if the environment is done and the current obs
         done = terminated or truncated

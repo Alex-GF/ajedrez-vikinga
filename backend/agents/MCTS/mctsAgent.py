@@ -49,7 +49,7 @@ class MCTSHnefataflAgent:
             while i < self.simulations_number:
                 v1 = self._tree_policy(v0, self.exploration_factor)
                 delta = self._default_policy(v1)
-                delta = delta if v1.parent.state[1] == self.player else -delta
+                #delta = delta if v1.parent.state[1] == self.player else -delta
                 backup(v1, delta)
                 
                 i += 1
@@ -66,10 +66,10 @@ class MCTSHnefataflAgent:
         next_turn = next_obs["turn"]
         movements_left = next_obs["movements_left"]
         
-        if next_turn != self.player:
-            reward += removed_tokens
-        else:
-            reward -= removed_tokens
+        # if next_turn != self.player:
+        #     reward += removed_tokens
+        # else:
+        #     reward -= removed_tokens
             
         # Premios/castigos por victoria/derrota
             
@@ -91,6 +91,8 @@ class MCTSHnefataflAgent:
         
         self.accumulated_reward.append(self.accumulated_reward[-1] + reward)
         
+        print("Reward: ", self.accumulated_reward)
+        
     
     # --------------------------- PRIVATE FUNCTIONS --------------------------- #
     
@@ -110,7 +112,7 @@ class MCTSHnefataflAgent:
         movs = v.movements
         player = v.parent.state[1]
         movements_left = v.max_movements
-        total_reward = 0
+        total_reward = self.accumulated_reward[-1]
         
         while not es_estado_final_api.get(state, len(movs), movements_left):
             
@@ -122,22 +124,26 @@ class MCTSHnefataflAgent:
             
             # Premios/castigos por captura de fichas
             
-            if player == self.player:
-                total_reward += removed_tokens
-            else:
-                total_reward -= removed_tokens
+            # if player == self.player:
+            #     total_reward += removed_tokens
+            # else:
+            #     total_reward -= removed_tokens
                 
             # Premios/castigos por victoria/derrota
                 
-            if ganan_negras_api.get(next_state, movements_left) and self.player == 1:
+            if ganan_negras_api.get(next_state, movements_left) and player == 1:
+                #print("Deduce Ganan Negras")
                 total_reward += 1000
-            elif ganan_blancas_api.get(next_state, movements_left) and self.player == 2:
+            elif ganan_blancas_api.get(next_state, movements_left) and player == 2:
+                #print("Deduce Ganan Blancas")
                 total_reward += 1000
             elif movements_left == 0:
                 total_reward += 100
-            elif ganan_negras_api.get(next_state, movements_left) and self.player == 2:
+            elif ganan_negras_api.get(next_state, movements_left) and player == 2:
+                #print("Deduce Ganan Negras")
                 total_reward -= 1000
-            elif ganan_blancas_api.get(next_state, movements_left) and self.player == 1:
+            elif ganan_blancas_api.get(next_state, movements_left) and player == 1:
+                #print("Deduce Ganan Blancas")
                 total_reward -= 1000
                 
         return total_reward
