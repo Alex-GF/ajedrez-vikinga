@@ -1,0 +1,63 @@
+.class-menu{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+
+    height: 100px;
+    width: 100px;
+
+    z-index: 5;
+}
+
+.class-menu-img{
+    height: 75px;
+    width: 75px;
+
+    cursor: pointer;
+}
+
+.class-menu-div{
+    position: absolute;
+    left: -30vw;
+
+    height: 100%;
+    width: 25vw;
+
+    transition: left 0.5s;
+
+    background-color: rgb(52, 58, 64);
+    z-index: 20;
+}
+
+.class-close-menu{
+    height: 50px;
+    width: 50px;
+
+    margin-left: 10px;
+    margin-top: 10px;
+
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+
+.class-menu-option{
+    height: 75px;
+    width: 100%;
+
+    margin-bottom: 10px;
+
+    color: rgb(255, 255, 255);
+    font-family: Login;
+    font-size: 3vh;
+
+    border-top: solid 2px rgb(255, 255, 255);
+    border-bottom: solid 2px rgb(255, 255, 255);
+
+    cursor: pointer;
+}
+
+.class-menu-option:hover{
+    
+    background-color: rgb(255,255,255);
+    color: rgb(0,0,0);
+}

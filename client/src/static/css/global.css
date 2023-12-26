@@ -1,0 +1,9 @@
+.class-page-body{
+    width: 100vw;
+    height: 100vh;
+    background-image: url("../internal-images/dark-background.jpg");
+    background-size: contain;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

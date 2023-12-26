@@ -1,0 +1,78 @@
+.class-board{
+    width: 45vw;
+    height: 45vw;
+    background-color: orange;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    grid-template-rows: repeat(11, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+.class-cell{
+    border: solid rgb(0, 0, 0) 1px;
+}
+
+.class-cell-hover{
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.throne, .exit {
+    background-color: rgb(39, 127, 0);
+}
+
+.black-token, .white-token, .king-token{
+    width: 100%;
+    height: 100%;
+    clip-path: circle(30% at 50% 50%);
+    transition: transform 1s;
+}
+
+.black-token{
+    background-color: black;
+}
+
+.white-token, .king-token{
+    background-color: white;
+}
+
+.king-token, .exit-cross {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.exit-cross::before, .exit-cross::after,
+.king-token::before, .king-token::after {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 4px;
+    background-color: black;
+}
+
+.king-token::before {
+    transform: rotate(90deg);
+}
+
+.possible-movement{
+    background-color: rgba(255, 255, 255,0.75);
+    cursor: pointer;
+}
+
+.cell-hover, .cell-selected{
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+}
+
+.exit-cross::before {
+    transform: rotate(45deg);
+}
+
+.exit-cross::after {
+    transform: rotate(-45deg);
+}
