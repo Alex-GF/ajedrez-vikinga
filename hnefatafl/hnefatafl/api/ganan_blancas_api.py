@@ -2,9 +2,7 @@ def get(state, movements_number):
 
     win = False
 
-    if movements_number == 0 and state[1] == 1:
-        win = True
-    elif king_escaped(state[0]):
+    if (movements_number == 0 and state[1] == 1) or king_escaped(state[0]):
         win = True
 
     return win

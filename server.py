@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 import random
 
-from backend.api import obtiene_estado_inicial_api, obtiene_movimientos_api, ganan_negras_api, ganan_blancas_api, aplica_movimiento_api, busca_solucion_api
+from backend.agents.MCTS.api import obtiene_estado_inicial_api, obtiene_movimientos_api, ganan_negras_api, ganan_blancas_api, aplica_movimiento_api, busca_solucion_api
 
 API_VERSION = '/v1'
 BASE_URL = '/api' + API_VERSION
