@@ -17,4 +17,5 @@ def best_child(v, c):
 
 def child_index(v, c):
 
-    return (v.q/v.n) + (c*sqrt((2*log(v.n))/v.n))
+    result = (v.q/v.n) + (c*sqrt((2*log(v.n))/v.n))
+    return result

@@ -13,8 +13,7 @@ class MCTSHnefataflAgent:
     def __init__(self, 
         env: HnefataflEnv,
         player: int,
-        learning_rate: float,
-        exploration_factor: float = sqrt(2),
+        exploration_factor: float = 1/sqrt(2),
         epsilon: float = 0.1,
         simulations_number: int = 1000,
         movement_selection_policy: str = "random",
@@ -24,7 +23,6 @@ class MCTSHnefataflAgent:
         if player < 1 or player > 2:
             raise ValueError("Player must be 1 or 2.")
         self.player = player
-        self.lr = learning_rate
         self.simulations_number = simulations_number
         self.exploration_factor = exploration_factor
         self.epsilon = epsilon
@@ -40,7 +38,7 @@ class MCTSHnefataflAgent:
         self.rng = np.random.default_rng(seed=self.seed)
         
         if self.rng.random() < self.epsilon:
-            return self.rng.choice(self.env.possible_actions)
+            return self.rng.choice(self.env.unwrapped.possible_actions)
         else:
             v0 = crea_nodo(state, None, self.env.unwrapped.max_movements)
             
@@ -49,7 +47,6 @@ class MCTSHnefataflAgent:
             while i < self.simulations_number:
                 v1 = self._tree_policy(v0, self.exploration_factor)
                 delta = self._default_policy(v1)
-                #delta = delta if v1.parent.state[1] == self.player else -delta
                 backup(v1, delta)
                 
                 i += 1
@@ -66,6 +63,8 @@ class MCTSHnefataflAgent:
         next_turn = next_obs["turn"]
         movements_left = next_obs["movements_left"]
         
+        # Por ahora se quedan comentadas las recompensas por captura de fichas, se valorará su eliminación en futuras actualizaciones
+
         # if next_turn != self.player:
         #     reward += removed_tokens
         # else:
@@ -90,9 +89,6 @@ class MCTSHnefataflAgent:
             reward -= 1000
         
         self.accumulated_reward.append(self.accumulated_reward[-1] + reward)
-        
-        print("Reward: ", self.accumulated_reward)
-        
     
     # --------------------------- PRIVATE FUNCTIONS --------------------------- #
     
@@ -122,7 +118,7 @@ class MCTSHnefataflAgent:
             movs = obtiene_movimientos_api.get(next_state)
             state = next_state
             
-            # Premios/castigos por captura de fichas
+            # Premios/castigos por captura de fichas # Por ahora se quedan comentadas las recompensas por captura de fichas, se valorará su eliminación en futuras actualizaciones
             
             # if player == self.player:
             #     total_reward += removed_tokens
@@ -145,5 +141,5 @@ class MCTSHnefataflAgent:
             elif ganan_blancas_api.get(next_state, movements_left) and player == 1:
                 #print("Deduce Ganan Blancas")
                 total_reward -= 1000
-                
+        
         return total_reward

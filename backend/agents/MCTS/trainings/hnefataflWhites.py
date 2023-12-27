@@ -1,3 +1,4 @@
+from math import sqrt
 import sys
 from pathlib import Path
 
@@ -5,30 +6,26 @@ project_root = Path(__file__).resolve().parents[4]  # Ajusta el número de paren
 sys.path.append(str(project_root))
 
 import gymnasium as gym
-from gymnasium.wrappers import FlattenObservation
-import numpy as np
 from tqdm import tqdm
 from backend.agents.MCTS.mctsAgent import MCTSHnefataflAgent
 import matplotlib.pyplot as plt
 
-env = gym.make('hnefatafl/Hnefatafl-v0', board=3, max_movements=100, render_mode="human")
-wrapped_env = FlattenObservation(env)
+env = gym.make('hnefatafl/Hnefatafl-v0', board=3, max_movements=1000, render_mode="human")
 
-learning_rate = 0.01
-n_episodes = 1000
+n_episodes = 5
 
 whitesAgent = MCTSHnefataflAgent(
     env=env,
     player=2,
-    learning_rate=learning_rate,
     simulations_number=100,
+    exploration_factor = 1/4
 )
 
 blacksAgent = MCTSHnefataflAgent(
     env=env,
     player=1,
-    learning_rate=learning_rate,
     simulations_number=100,
+    exploration_factor = 1/sqrt(2)
 )
 
 whites_plot_entries = {
@@ -76,6 +73,10 @@ for episode in tqdm(range(n_episodes)):
     blacks_plot_entries["x"].append(episode)
     blacks_plot_entries["y"].append(final_black_agent_reward)
     
-plt.plot(whites_plot_entries["x"], whites_plot_entries["y"])
-plt.plot(blacks_plot_entries["x"], blacks_plot_entries["y"])
+plt.plot(whites_plot_entries["x"], whites_plot_entries["y"], label="Whites")
+plt.plot(blacks_plot_entries["x"], blacks_plot_entries["y"], label="Blacks")
+plt.title("Evolución de recompensas de agentes")
+plt.xlabel("Episodio")
+plt.ylabel("Recompensa")
+plt.legend()
 plt.show()
