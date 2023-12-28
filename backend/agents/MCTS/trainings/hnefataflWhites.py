@@ -18,7 +18,7 @@ whitesAgent = MCTSHnefataflAgent(
     env=env,
     player=2,
     simulations_number=100,
-    exploration_factor = 1/4
+    exploration_factor = 0
 )
 
 blacksAgent = MCTSHnefataflAgent(

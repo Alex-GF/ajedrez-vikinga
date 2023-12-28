@@ -26,6 +26,7 @@ class MCTSHnefataflAgent:
         self.simulations_number = simulations_number
         self.exploration_factor = exploration_factor
         self.epsilon = epsilon
+        self.epsilon_decay = 1 - 1/self.env.unwrapped.max_movements
         self.movement_selection_policy = movement_selection_policy
         self.seed = seed
         
@@ -89,6 +90,8 @@ class MCTSHnefataflAgent:
             reward -= 1000
         
         self.accumulated_reward.append(self.accumulated_reward[-1] + reward)
+        
+        self.epsilon = self.epsilon * self.epsilon_decay
     
     # --------------------------- PRIVATE FUNCTIONS --------------------------- #
     
