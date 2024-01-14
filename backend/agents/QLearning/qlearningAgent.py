@@ -1,7 +1,9 @@
+import random
 from collections import defaultdict
 
 import numpy as np
-from backend.agents.MCTS.api import es_estado_final_api, aplica_movimiento_api, obtiene_movimientos_api, ganan_negras_api, ganan_blancas_api
+from backend.agents.MCTS.api import es_estado_final_api, aplica_movimiento_api, obtiene_movimientos_api, \
+    ganan_negras_api, ganan_blancas_api
 
 from hnefatafl.envs import HnefataflEnv
 
@@ -26,7 +28,7 @@ class QlearningAgent:
             raise ValueError("Player must be 1 or 2.")
         self.player = player
 
-        self.q_values = defaultdict(lambda: np.zeros(len(self.env.action_space)))
+        self.q_values = defaultdict(lambda: defaultdict(float))
 
         self.lr = learning_rate
         self.discount_factor = discount_factor
@@ -55,8 +57,13 @@ class QlearningAgent:
         # with probability (1 - epsilon) act greedily (exploit)
         else:
             _obs = ' '.join(map(str, obs[0]))
-            q = self.q_values.get(_obs, 0)
-            return q if q and np.argmax(q, 0) else self.rng.choice(self.env.unwrapped.possible_actions)
+            return self._best_action(_obs)
+
+    def _best_action(self, obs):
+        actions = self.q_values.get(obs)
+        max_value = np.max(actions.values()) if actions else 0
+        best_actions = [action for action, value in actions.items() if value == max_value] if actions else []
+        return random.choice(best_actions) if best_actions else self.rng.choice(self.env.unwrapped.possible_actions)
 
     def update(
             self,
@@ -71,18 +78,18 @@ class QlearningAgent:
         obs = ' '.join(map(str, obs[0]))
         """Updates the Q-value of an action."""
         _next_obs = ''.join(map(str, next_obs['board']))
-        future_q_value = (not terminated) * np.max(self.q_values[_next_obs])
+        _action = ' '.join(map(str, action))
+        future_q_value = (not terminated) * np.max(self.q_values[_next_obs][_action])
         temporal_difference = (
-                reward + self.discount_factor * future_q_value - self.q_values.get(obs, 0)
+                reward + self.discount_factor * future_q_value - self.q_values[obs][_action]
         )
 
-        self.q_values[obs] = (
-                self.q_values.get(obs, 0) + self.lr * temporal_difference
+        self.q_values[obs][_action] = (
+                self.q_values[obs][_action] + self.lr * temporal_difference
         )
         self.training_error.append(temporal_difference)
 
         reward = 0
-
 
         next_state = (_obs[0], _obs[1])
         next_turn = _obs[1]
@@ -97,20 +104,27 @@ class QlearningAgent:
 
         # Premios/castigos por victoria/derrota
 
+        if terminated:
+            possible_moves = 0
+
         if ganan_negras_api.get(next_state, possible_moves) and self.player == 1:
-            print("Ganan negras")
+            # print("Ganan negras")
+            print("Ganan blancas")
             reward += 1000
         elif ganan_blancas_api.get(next_state, possible_moves) and self.player == 2:
-            print("Ganan blancas")
+            # print("Ganan blancas")
+            print("Ganan negras")
             reward += 1000
         elif movements_left == 0:
             print("Tablas")
             reward += 100
         elif ganan_negras_api.get(next_state, possible_moves) and self.player == 2:
-            print("Ganan negras")
+            # print("Ganan negras")
+            print("Ganan blancas")
             reward -= 1000
         elif ganan_blancas_api.get(next_state, possible_moves) and self.player == 1:
-            print("Ganan blancas")
+            # print("Ganan blancas")
+            print("Ganan negras")
             reward -= 1000
 
         self.accumulated_reward.append(self.accumulated_reward[-1] + reward)

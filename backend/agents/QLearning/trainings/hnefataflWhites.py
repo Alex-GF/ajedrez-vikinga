@@ -64,8 +64,8 @@ for episode in tqdm(range(n_episodes)):
 
         # update the agent
         # agent.update(obs, action, reward, terminated, next_obs) Se deja comentado para mejorar las estadísticas que se obtienen de él en el futuro
-        blacksAgent.update(state, action, reward, next_obs=next_obs, terminated=terminated, possible_moves=len(env.action_space))
-        whitesAgent.update(state, action, reward, next_obs=next_obs, terminated=terminated, possible_moves=(env.action_space))
+        blacksAgent.update(state, action, reward, next_obs=next_obs, terminated=terminated, possible_moves=len(env.unwrapped.possible_actions))
+        whitesAgent.update(state, action, reward, next_obs=next_obs, terminated=terminated, possible_moves=len(env.unwrapped.possible_actions))
 
         # update if the environment is done and the current obs
         done = terminated or truncated
