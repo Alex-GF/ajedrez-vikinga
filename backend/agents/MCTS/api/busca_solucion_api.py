@@ -1,4 +1,4 @@
-from backend.mcts import mcts
+from backend.agents.MCTS.mcts import mcts
 from . import aplica_movimiento_api
 
 def get(current_state, time, max_movements, cp, heuristic):

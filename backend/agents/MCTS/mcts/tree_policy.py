@@ -1,4 +1,4 @@
-from backend.api import es_estado_final_api
+from backend.agents.MCTS.api import es_estado_final_api
 from .expand import expand
 from .best_child import best_child
 

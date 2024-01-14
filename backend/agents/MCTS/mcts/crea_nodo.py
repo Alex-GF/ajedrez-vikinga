@@ -1,5 +1,5 @@
 from .objects.nodo import Nodo
-from backend.api import obtiene_movimientos_api
+from backend.agents.MCTS.api import obtiene_movimientos_api
 
 def crea_nodo(state, parent, max_movements):
     
