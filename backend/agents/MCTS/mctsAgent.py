@@ -5,8 +5,9 @@ from backend.agents.MCTS.mcts.crea_nodo import crea_nodo
 from backend.agents.MCTS.mcts.backup import backup
 from backend.agents.MCTS.mcts.best_child import best_child
 from backend.agents.MCTS.mcts.expand import expand
-from hnefatafl.hnefatafl.envs.hnefatafl import HnefataflEnv
+from hnefatafl.envs.hnefatafl import HnefataflEnv
 import numpy as np
+import time
 
 class MCTSHnefataflAgent:
     
@@ -17,7 +18,10 @@ class MCTSHnefataflAgent:
         epsilon: float = 0.1,
         simulations_number: int = 1000,
         movement_selection_policy: str = "random",
-        seed: int = None
+        seed: int = None,
+        average_time: list = [],
+        cheess_pieces: list = [],
+        color: str = "white"
     ):  
         self.env = env
         if player < 1 or player > 2:
@@ -32,13 +36,19 @@ class MCTSHnefataflAgent:
         
         # Agent evolution data
         self.accumulated_reward = [0]
+        self.average_time = average_time
+        self.chess_pieces = cheess_pieces
+        self.color = color
         
         
     def get_action(self, state):
+
+        t = time.time()
         
         self.rng = np.random.default_rng(seed=self.seed)
         
         if self.rng.random() < self.epsilon:
+            self.average_time.append(time.time() - t)
             return self.rng.choice(self.env.unwrapped.possible_actions)
         else:
             v0 = crea_nodo(state, None, self.env.unwrapped.max_movements)
@@ -51,10 +61,12 @@ class MCTSHnefataflAgent:
                 backup(v1, delta)
                 
                 i += 1
-            
+
+            self.average_time.append(time.time() - t)
+
             return v0.movements[best_child(v0, 0)]
         
-    def update(self, next_obs, possible_moves, obtained_reward):
+    def update(self, next_obs, possible_moves, obtained_reward, state=None):
         
         reward = 0
         
@@ -72,26 +84,35 @@ class MCTSHnefataflAgent:
         #     reward -= removed_tokens
             
         # Premios/castigos por victoria/derrota
-            
+        r=""
         if ganan_negras_api.get(next_state, possible_moves) and self.player == 1:
             print("Ganan negras")
             reward += 1000
+            r = "Ganan negras"
         elif ganan_blancas_api.get(next_state, possible_moves) and self.player == 2:
             print("Ganan blancas")
             reward += 1000
+            r = "Ganan blancas"
         elif movements_left == 0:
             print("Tablas")
             reward += 100
+            r = "Tablas"
         elif ganan_negras_api.get(next_state, possible_moves) and self.player == 2:
             print("Ganan negras")
             reward -= 1000
+            r = "Ganan negras"
         elif ganan_blancas_api.get(next_state, possible_moves) and self.player == 1:
             print("Ganan blancas")
             reward -= 1000
-        
+            r = "Ganan blancas"
+
         self.accumulated_reward.append(self.accumulated_reward[-1] + reward)
         
         self.epsilon = self.epsilon * self.epsilon_decay
+
+        self._removed_tokens(state, next_state)
+
+        return r
     
     # --------------------------- PRIVATE FUNCTIONS --------------------------- #
     
@@ -146,3 +167,38 @@ class MCTSHnefataflAgent:
                 total_reward -= 1000
         
         return total_reward
+
+    ## quiero una funcion a la que le pase un estado antiguo y un estado nuevo y me devuelva el numero de fichas que se han eliminado
+
+    def _removed_tokens(self, old_state, new_state):
+
+            old_board = old_state[0]
+            new_board = new_state[0]
+
+            removed_tokens = 0
+
+            if self.color == "white":
+
+                _old_board = 0
+                _new_board = 0
+
+                for i in old_board:
+                    _old_board += len(list(filter(lambda x: x == 1, i)))
+                for i in new_board:
+                    _new_board += len(list(filter(lambda x: x == 1, i)))
+
+                if _new_board < _old_board:
+                    self.chess_pieces.append(1)
+
+
+            else:
+                _old_board = 0
+                _new_board = 0
+
+                for i in old_board:
+                    _old_board += len(list(filter(lambda x: x == 2 or 3, i)))
+                for i in new_board:
+                    _new_board += len(list(filter(lambda x: x == 2 or 3, i)))
+
+                if _new_board < _old_board:
+                    self.chess_pieces.append(1)
