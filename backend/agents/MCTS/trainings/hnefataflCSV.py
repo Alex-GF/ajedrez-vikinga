@@ -103,8 +103,8 @@ with open("C:\\Users\\vicen\\MASTER\\MLE\\TRABAJOS\\ajedrez-vikinga\\documentaci
 
                     average_time_whites = np.mean(whitesAgent.average_time)
                     average_time_blacks = np.mean(blacksAgent.average_time)
-                    chess_pieces_whites = np.sum(whitesAgent.chess_pieces)
-                    chess_pieces_blacks = np.sum(blacksAgent.chess_pieces)
+                    chess_pieces_whites = np.sum(whitesAgent.chess_pieces_whites)
+                    chess_pieces_blacks = np.sum(blacksAgent.chess_pieces_blacks)
 
 
 
@@ -113,8 +113,16 @@ with open("C:\\Users\\vicen\\MASTER\\MLE\\TRABAJOS\\ajedrez-vikinga\\documentaci
                                         agentes[b]["simulations_number"], agentes[b]["exploration_factor"],
                                          average_time_whites, chess_pieces_whites,
                                          average_time_blacks, chess_pieces_blacks, r])
-                        whitesAgent.chess_pieces = []
-                        blacksAgent.chess_pieces = []
+
+                        blacksAgent.number_of_pieces_whites = 0
+                        blacksAgent.number_of_pieces_blacks = 0
+                        blacksAgent.chess_pieces_blacks = []
+                        blacksAgent.chess_pieces_whites = []
+
+                        whitesAgent.number_of_pieces_whites = 0
+                        whitesAgent.number_of_pieces_blacks = 0
+                        whitesAgent.chess_pieces_whites = []
+                        whitesAgent.chess_pieces_blacks = []
 
 
             final_white_agent_reward = whitesAgent.accumulated_reward[-1]

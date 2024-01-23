@@ -20,8 +20,11 @@ class MCTSHnefataflAgent:
         movement_selection_policy: str = "random",
         seed: int = None,
         average_time: list = [],
-        cheess_pieces: list = [],
-        color: str = "white"
+        color: str = "white",
+        chess_pieces_whites: list = [],
+        chess_pieces_blacks: list = [],
+        number_of_pieces_whites: int = 0,
+        number_of_pieces_blacks: int = 0
     ):  
         self.env = env
         if player < 1 or player > 2:
@@ -37,8 +40,11 @@ class MCTSHnefataflAgent:
         # Agent evolution data
         self.accumulated_reward = [0]
         self.average_time = average_time
-        self.chess_pieces = cheess_pieces
         self.color = color
+        self.chess_pieces_whites = chess_pieces_whites
+        self.chess_pieces_blacks = chess_pieces_blacks
+        self.number_of_pieces_whites = number_of_pieces_whites
+        self.number_of_pieces_blacks = number_of_pieces_blacks
         
         
     def get_action(self, state):
@@ -175,30 +181,27 @@ class MCTSHnefataflAgent:
             old_board = old_state[0]
             new_board = new_state[0]
 
-            removed_tokens = 0
+            old_board = np.array(old_board)
+            new_board = np.array(new_board)
+
+            old_board = old_board.flatten()
+            new_board = new_board.flatten()
 
             if self.color == "white":
 
-                _old_board = 0
-                _new_board = 0
+                _old_board = sum(old_board == 1)
+                _new_board = sum(new_board == 1)
 
-                for i in old_board:
-                    _old_board += len(list(filter(lambda x: x == 1, i)))
-                for i in new_board:
-                    _new_board += len(list(filter(lambda x: x == 1, i)))
+                if _new_board < self.number_of_pieces_whites:
+                    self.chess_pieces_whites.append(1)
 
-                if _new_board < _old_board:
-                    self.chess_pieces.append(1)
-
+                self.number_of_pieces_whites = _new_board
 
             else:
-                _old_board = 0
-                _new_board = 0
+                _old_board = sum((old_board == 2) | (old_board == 3))
+                _new_board = sum((new_board == 2) | (new_board == 3))
 
-                for i in old_board:
-                    _old_board += len(list(filter(lambda x: x == 2 or 3, i)))
-                for i in new_board:
-                    _new_board += len(list(filter(lambda x: x == 2 or 3, i)))
+                if _new_board < self.number_of_pieces_blacks:
+                    self.chess_pieces_blacks = _new_board
 
-                if _new_board < _old_board:
-                    self.chess_pieces.append(1)
+                self.number_of_pieces_blacks = _new_board
