@@ -1,4 +1,4 @@
-learning_rate_whites,initial_epsilon_whites,epsilon_decay_whites,final_epsilon_whites,learning_rate_blacks,initial_epsilon_blacks,epsilon_decay_blacks,final_epsilon_blacls,average_time_whites,chess_pieces_whites,average_time_blacks,chess_pieces_blacs,result
+learning_rate_whites,initial_epsilon_whites,epsilon_decay_whites,final_epsilon_whites,learning_rate_blacks,initial_epsilon_blacks,epsilon_decay_blacks,final_epsilon_blacks,average_time_whites,chess_pieces_whites,average_time_blacks,chess_pieces_blacks,result
 0.2,0.9,0.85,0.05,0.05,0.5,0.95,0.2,0.00013815770383741034,1,0.00013815770383741034,8,Ganan negras
 0.2,0.9,0.85,0.05,0.05,0.5,0.95,0.2,0.00012617403606198868,6,0.00012617403606198868,4,Ganan negras
 0.2,0.9,0.85,0.05,0.05,0.5,0.95,0.2,0.0001228119875933673,7,0.0001228119875933673,3,Ganan blancas
