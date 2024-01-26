@@ -1,4 +1,4 @@
-agent_white,agent_black,average_time_whites,chess_pieces_whites,average_time_blacks,chess_pieces_blacs,result
+agent_white,agent_black,average_time_whites,chess_pieces_whites,average_time_blacks,chess_pieces_blacks,result
 1,4,0.0003681791589615193,7,1.3245142875833715,6,Ganan blancas
 1,4,0.00040254592895507815,4,1.4526911193674261,3,Ganan blancas
 1,4,0.00043044052022026187,16,1.610721909426113,3,Ganan blancas
