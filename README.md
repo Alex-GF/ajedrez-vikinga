@@ -29,6 +29,13 @@ pip install -e hnefatafl
 - /ajedrez-vikinga
   | ...
   |
+  ├─ /analysis
+  |  |
+  |  ├─ /results
+  |  |  | ...
+  |  |
+  |  └─ agents_analysis.ipynb
+  |
   └─ /backend
      | ...
      |
@@ -53,9 +60,11 @@ pip install -e hnefatafl
            |  └─ hnefataflWhites.py
            |
            └─ qlearningAgent.py
+
 ```
 
 Los ficheros *mctsAgent.py* y *qlearningAgent.py* son donde se han implementado cada agente, mientras que los ficheros *hnefataflWhites.py* son donde, en nuestro caso, hacemos uso de los agentes, dandole una configuración de hiperparámetros, configurando el tablero, número de episodios ... 
+En la carpeta *analysis* se encuentra el fichero *agents_analysis.ipynb*, donde se evalua la mejor configuración de hiperparámetros y cual es el mejor agente, y los csv obtenidos de la rama *results*.
 
 ## ¿Cómo ver los agentes en funcionamiento?
 
