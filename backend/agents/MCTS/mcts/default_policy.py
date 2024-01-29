@@ -1,4 +1,4 @@
-from backend.api import es_estado_final_api, aplica_movimiento_api, obtiene_movimientos_api, ganan_blancas_api, ganan_negras_api
+from backend.agents.MCTS.api import es_estado_final_api, aplica_movimiento_api, obtiene_movimientos_api, ganan_blancas_api, ganan_negras_api
 import random
 
 def default_policy(v, heuristic):

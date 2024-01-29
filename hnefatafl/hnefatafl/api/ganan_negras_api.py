@@ -2,9 +2,7 @@ def get(state, movements_number):
 
     win = False
 
-    if movements_number == 0 and state[1] == 2:
-        win = True
-    elif king_captured(state[0]):
+    if (movements_number == 0 and state[1] == 2) or king_captured(state[0]):
         win = True
 
     return win
