@@ -76,6 +76,4 @@ python backend/agents/MCTS/trainings/hnefataflWhites.py
 o
 ```
 python backend/agents/QLearning/trainings/hnefataflWhites.py
-```
-
-
+``
