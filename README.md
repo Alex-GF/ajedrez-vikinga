@@ -1,4 +1,4 @@
-# Montecarlo Tree Search en el ajedrez vikingo: Introducción a la búsqueda de la heurística perfecta
+# Comparando Modelos de Q-Learning y Montecarlo Tree Search en el Desarrollo de Agentes para el Ajedrez Vikingo
 
 Este es el proyecto para la asignatura de Machine Learning Engineering del Máster en Ingeniería Informática: Cloud, Datos y Gestión TI en el curso 2023-2024. Realizado por Vicente Cambrón Tocados y Alejandro García Fernández.
 
@@ -6,80 +6,74 @@ Este es el proyecto para la asignatura de Machine Learning Engineering del Mást
 
 ## Requisitos previos al lanzamiento del proyecto
 
-- Tener instalado [Node.JS](https://nodejs.org/es/download/) y con él su gestor de paquetes: npm
 - Tener instalado [Git](https://git-scm.com/downloads) en nuestro ordenador
 - Tener instalado [Python](https://www.python.org/downloads/) y su correspondiente gestor de paquetes [pip](https://pypi.org/project/pip/)
 
 ## Instalación de paquetes de python externos
 
-Para el correcto funcionamiento de la palicación, será necesario contar con los siguientes paquetes en python.
-Estos pueden instalarse utilizando pip. Son los que siguen:
-
-- Flask
-- Flask CORS
-
-## ¿Cómo arrancar el servidor del proyecto localmente?
-
-En primer lugar, nos dirigimos al directorio en el que deseemos guardar el proyecto. Lo clonamos y accedemos:
+Para el correcto funcionamiento de la palicación, será necesario instalar todos los paquetes que se encuentran en el fichero *requirements.txt*, localizado en la raíz del proyecto, con el siguiete comando:
 
 ```
-git clone https://github.com/Alex-GF/ajedrez-vikinga.git
-cd montecarlo
-cd backend
+pip install -r requirements.txt
 ```
 
-Desde esta carpeta ejecutamos el siguiente comando para lanzar el servidor:
+Además se deberá de instalar el entorno para [Gymnasium](https://gymnasium.farama.org/index.html) de *hnefatafl* mediante el siguiente comando desde la raíz del proyeto:
 
 ```
-python server.py
+pip install -e hnefatafl
 ```
 
-Si todo ha ido bien, el servidor debería estar arrancado en el puerto 8080 por defecto. Al no tener ninguna vista definida, no se recomienda acceder a localhost:8080.
-
-## Configuración de variables de entorno
-
-1. Entrar a la carpeta client:
+## Estructura del proyecto
 
 ```
-cd ./client/
-```
-
-2. Dentro de la carpeta, crear un nuevo archivo con el nombre **.env.local**.
-
-3. Rellenar **.env.local** con las variables de entorno que aparecen en **.env.example**, sustituyendo los guiones entre comillas por la dirección en la que se ejecuta la api REST de nuestro servidor. Si el servidor está lanzado en el puerto 8080, quedarían así:
-
-```
-REACT_APP_API_BASE_URL = "http://localhost:8080/api/v1/"
-```
-
-**Es importante no olvidar la barra final**
-
-## ¿Cómo arrancar el frontend?
-
-Dentro de la carpeta principal del proyecto, nos dirigimos a ./client/:
-
-```
-cd ./client/
-```
-
-Dentro de esta carpeta, instalamos los paquetes necesarios y lanzamos el servidor de frontend con el siguiente flujo de comandos:
-
-```
-npm install -g yarn
-yarn install
-yarn start
-```
-
-Si el último comando da error, ejecutar lo siguiente:
-
-```
-yarn add react-scripts
-```
-
-A continuación, arrancamos de nuevo:
+- /ajedrez-vikinga
+  | ...
+  |
+  ├─ /analysis
+  |  |
+  |  ├─ /results
+  |  |  | ...
+  |  |
+  |  └─ agents_analysis.ipynb
+  |
+  └─ /backend
+     | ...
+     |
+     └─ /agents
+        |
+        ├─ /MCTS
+        |  | ...
+        |  |
+        |  ├─ /trainings
+        |  |  | ...
+        |  |  |
+        |  |  └─ hnefataflWhites.py
+        |  |
+        |  └─ mctsAgent.py
+        |
+        └─ /QLearning
+           | ...
+           |
+           ├─ /trainings
+           |  | ...
+           |  |
+           |  └─ hnefataflWhites.py
+           |
+           └─ qlearningAgent.py
 
 ```
-yarn start
-```
 
-Si todo ha ido bien, debería abrirse de manera automática una pestaña en su navegador con la página del proyecto.
+Los ficheros *mctsAgent.py* y *qlearningAgent.py* son donde se han implementado cada agente, mientras que los ficheros *hnefataflWhites.py* son donde, en nuestro caso, hacemos uso de los agentes, dandole una configuración de hiperparámetros, configurando el tablero, número de episodios ... 
+En la carpeta *analysis* se encuentra el fichero *agents_analysis.ipynb*, donde se evalua la mejor configuración de hiperparámetros y cual es el mejor agente, y los csv obtenidos de la rama *results*.
+
+## ¿Cómo ver los agentes en funcionamiento?
+
+Una vez instalado los paquetes solo tendremos que lanzar cualquiera de los ficheros *hnefataflWhites.py*, realizando cualquier modificación sobre los agentes o el entorno si asi lo queremos:
+
+```
+python backend/agents/MCTS/trainings/hnefataflWhites.py
+```
+o
+```
+python backend/agents/QLearning/trainings/hnefataflWhites.py
+```
